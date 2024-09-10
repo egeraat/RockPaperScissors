@@ -25,14 +25,27 @@ namespace RockPaperScissors
             switch (choice)
             {
                 case 1:
-                    return "steen"; 
+                    return "steen";
                 case 2:
-                    return "papier"; 
+                    return "papier";
                 case 3:
-                    return "schaar"; 
+                    return "schaar";
                 default:
-                    return "ongeldige keuze"; 
+                    return "ongeldige keuze";
             }
+        }
+
+        public string DetermineWinner(int playerChoice, int computerChoice) //berekent wie wint
+        {
+            if (playerChoice == computerChoice) //als beide hetzelfde antwoord geven
+                return "Gelijkspel";
+
+            if ((playerChoice == 1 && computerChoice == 3) ||//steen (1) verslaat schaar (3)
+                (playerChoice == 2 && computerChoice == 1) ||//papier (2) verslaat steen (1)
+                (playerChoice == 3 && computerChoice == 2))//schaar (3) verslaat papier (2)
+                return "Win";
+
+            return "Verlies";
         }
     }
 
@@ -44,12 +57,25 @@ namespace RockPaperScissors
             PlayerChoice player = new PlayerChoice();
             Computer computer = new Computer();
 
+            int playerScore = 0;
+            int computerScore = 0;
+
             while (continuePlaying)
             {
                 int userChoice = player.GetUserChoice();
                 int computerChoice = computer.GetChoice();
                 string computerChoiceStr = computer.ChoiceResult(computerChoice);
+                string result = computer.DetermineWinner(userChoice, computerChoice);
+
                 Console.WriteLine($"Computer koos: {computerChoiceStr}");
+                Console.WriteLine($"Resultaat: {result}");
+
+                if (result == "Win")
+                    playerScore++;
+                else if (result == "Verlies")
+                    computerScore++;
+
+                Console.WriteLine($"Score - Speler: {playerScore}, Computer: {computerScore}");
                 Console.WriteLine("Klik [E] voor nog een ronde of klik een andere toets om af te sluiten");
                 string response = Console.ReadLine();
                 continuePlaying = response.Trim().ToLower() == "e";
